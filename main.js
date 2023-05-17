@@ -2,8 +2,8 @@ var c = document.getElementById("gc");
 var cc = c.getContext("2d", { alpha: false });
 
 var running = true;
-var steps_per_frame = 100;
-var seconds_until_reset = 240;
+var steps_per_frame = 50;
+var seconds_until_reset = 9999;
 var ants = [];
 var max_ants = 2;
 var wraparound = false;
@@ -11,13 +11,16 @@ var timer = 0;
 var div = 4;
 var pixel = cc.createImageData(1, 1);
 var d = pixel.data;
-var text = { text: "langton", color: "white" };
+var text = {
+  text: new URLSearchParams(window.location.search).get("text") ?? "Kvanttori",
+  color: "white",
+};
 
-window.onresize = e => {
+window.onresize = (e) => {
   resizeCanvas();
   init();
 };
-window.onload = e => {
+window.onload = (e) => {
   document.title = text.text;
   resizeCanvas();
   init();
@@ -32,15 +35,15 @@ function init() {
 
   cc.lineWidth = 1;
 
-  cc.font = `${c.height / 7}px Courier`;
+  cc.font = `${c.height / 7}px Mitr`;
   cc.fillStyle = text.color;
   cc.textAlign = "center";
   cc.fillText(text.text, c.width / 2, c.height / 2);
 }
 
 function resizeCanvas() {
-  c.width = window.innerWidth / div;
-  c.height = window.innerHeight / div;
+  c.width = window.innerWidth;
+  c.height = window.innerHeight;
   cc.clearRect(0, 0, c.width, c.height);
 }
 
@@ -58,7 +61,7 @@ function loop() {
 
 setInterval(() => {
   timer++;
-  if (timer >= seconds_until_reset) {
+  if (timer >= seconds_until_reset && seconds_until_reset !== -1) {
     timer = 0;
     resizeCanvas();
     init();
