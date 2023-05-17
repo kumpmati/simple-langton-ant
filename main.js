@@ -3,7 +3,10 @@ var cc = c.getContext("2d", { alpha: false });
 
 var running = true;
 var steps_per_frame = 50;
-var seconds_until_reset = 9999;
+var seconds_until_reset = parseInt(
+  new URLSearchParams(window.location.search).get("reset") ?? "-1"
+);
+
 var ants = [];
 var max_ants = 2;
 var wraparound = false;
@@ -16,11 +19,7 @@ var text = {
   color: "white",
 };
 
-window.onresize = (e) => {
-  resizeCanvas();
-  init();
-};
-window.onload = (e) => {
+window.onload = () => {
   document.title = text.text;
   resizeCanvas();
   init();
